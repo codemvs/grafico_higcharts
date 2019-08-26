@@ -9,9 +9,10 @@ var data = [
 
 var Grafico = Grafico || {
 
-	minEntradaAnterior: -1,
-	maxEntradaAnterior: -1,
+	// minEntradaAnterior: -1,
+	// maxEntradaAnterior: -1,
 	matriz: [],
+	idxMatriz: 0,
 	
 	init:function(data){
 		var dLineas = this.listarLineas(data);
@@ -22,24 +23,23 @@ var Grafico = Grafico || {
 
 		self.matriz =  eval( self.obtenerMatriz( dLineas ) );
 		
-		console.log(self.matriz);
-		
 		// recorrer lineas
-		var i = 0;
+		var cont = 0;
 		for (var key in dLineas) {
 			console.log(dLineas[key]);
-			this.recorrerLineas( dLineas[key], i);	
-			i++;
+			this.recorrerLineas( dLineas[key], cont);	
+			cont++;
 		}
-		
+		console.log(self.matriz);	
 	},
 	recorrerLineas: function( arrLinea, matrizIndex ){	
 		var self = this;	
 
-		var espacio = 0;
-		var barra = 0;
+		var espacio = 0; // Barra espacios
+		var barra = 0; // Barra Valor visible
 		var maxAnterior = 0;
 		
+		var contAux = 0;
 		arrLinea.forEach(function(item, i) {
 			// console.log(i, matrizIndex);
 			// if( self.minEntradaAnterior != -1 ) {
@@ -55,14 +55,37 @@ var Grafico = Grafico || {
 
 
 			if( i == 0 ) {
-				espacio = item.minEntrada
-
+				espacio = item.minEntrada;
+				barra = item.maxEntrada - item.minEntrada;
+				maxAnterior = item.maxEntrada;
+			} else {
+				espacio = item.minEntrada - maxAnterior;
+				barra = item.maxEntrada - item.minEntrada;
+				maxAnterior = item.maxEntrada;
 			}
-
+			// console.log( matrizIndex, espacio );
+			// console.log(matrizIndex, barra);
+			
+			
+			// console.log('c',contAux);
+			self.matriz[contAux][matrizIndex] = espacio;
+			contAux++;
+			// console.log('c+1',contAux);
+			self.matriz[contAux][matrizIndex] = barra;
+			contAux++;
+			// self.idxMatriz ++;
+			// console.log(self.idxMatriz);
+			
+			
 		});
-		self.minEntradaAnterior = -1;
+		// self.minEntradaAnterior = -1;
+		
+		
 	},
-
+	/**
+	 * Seccionar y ordenar valor de lineas
+	 * @param {*} objeto 
+	 */
 	listarLineas: function (objeto){		
 		var json = {};
 		if (objeto.length == 0) return [];
@@ -88,6 +111,10 @@ var Grafico = Grafico || {
 	    }
 	    return json;			
 	},
+	/**
+	 * Construir arreglo bidimiensional
+	 * @param {*} dataObject 
+	 */
 	obtenerMatriz:function( dataObject ){
 		// Obtener tamaño matriz
 		var totalRenglones = -1;
