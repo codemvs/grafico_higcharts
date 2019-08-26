@@ -1,216 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-</head>
-<body>
-	<div style="padding-top: 20px;">
-		<div id="container0" style="width:50px; height:400px;display: inline; float: left;"></div>
-	<div id="container" style="width:400px; height:400px; display: inline; float: left;"></div>
-	<div id="container2" style="width:400px; height:400px; display: inline; float: left;"></div>
-	
-</div>
 
-	<script src="https://code.highcharts.com/highcharts.js"></script>	
-	<script
-  src="https://code.jquery.com/jquery-3.4.1.js"></script>
-  <script src="app.js"></script>
-	<script>
-		var COLORES = {
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="padding-top: 20px;">
+        <div id="container0" style="width:50px; height:400px;display: inline; float: left;"></div>
+        <div id="container" style="width:400px; height:400px; display: inline; float: left;"></div>
+        <div id="container2" style="width:400px; height:400px; display: inline; float: left;"></div>
+
+    </div>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="app.js"></script>
+    <script>
+        var COLORES = {
             espacio: "white", //#
-            azul: "blue"            
+            azul: "blue"
         };
         var valorMaximo = 10;
-  //       Highcharts.chart('container0', {
-		//     chart: { type: 'column', width:100 },
-		//     title: { text: '' },
-		//     credits:{ enabled: false },
-		//     legend:{ enabled: false }, 
-		//     xAxis: { categories: [''] },
-		//     yAxis: { min: 1, max: valorMaximo, tickInterval:1, title: { text: '' } },
-		//     tooltip: {},
-		//     plotOptions: { stacking: 'normal'},
-		//     series: [ {  data:[valorMaximo], color: COLORES.espacio},
-		   
-		//     ]
-		// });
+        //       Highcharts.chart('container0', {
+        //     chart: { type: 'column', width:100 },
+        //     title: { text: '' },
+        //     credits:{ enabled: false },
+        //     legend:{ enabled: false }, 
+        //     xAxis: { categories: [''] },
+        //     yAxis: { min: 1, max: valorMaximo, tickInterval:1, title: { text: '' } },
+        //     tooltip: {},
+        //     plotOptions: { stacking: 'normal'},
+        //     series: [ {  data:[valorMaximo], color: COLORES.espacio},
 
-		Highcharts.chart('container',{                                        
-                    chart: {
-                        type: 'column',
-                        //renderTo: 'container-' + i,
-                        //renderTo: $('#'),
-                        width: 153,
-                        // height: 180,
-                        // margin: [0, 0, 0, 0]                   
-                    },
-                    credits: {
-                        enabled: true
-                    },                   
-                    title: {
-                        text: ''
-                    },
-                    legend:{
-                        enabled: false
-                    }, 
-                    xAxis: {
-                        // lineWidth: 0,
-                        categories: ['LAC','','','DEC'],
-                        // minorTickLength: 0,
-                        // tickLength: 0,
-                        // gridLineWidth: 1,
-                    },
-                    yAxis: {
-                        title: {
-                            text: ''
-                        },
-                        // lineWidth: 1,
-                        // gridLineWidth: 1,
-                        // minorTickLength: 1,
-                        // tickLength: 1,
-                        min: 1,
-                         max: valorMaximo
-                      //  min: 1, max: valorMaximo, tickInterval:1, title: { text: '' }
-                    },
-                    tooltip: {
-                        //headerFormat: '<span style="font-size:10px;display:none;">{point.key}</span><table>',
-                        //pointFormat: '<table class="tooltip-avance"><tr><td style="color:black;padding:0;font-size:9px">{series.name}: </td>' +
-                        //                        '<td style="padding:0;font-size:10px"><b>{point.y:.3f} </b></td></tr>',
-                        //footerFormat: '</table>',                        
-                        //shared: false,
-                        //useHTML: true
-                        enabled: false
-                    },
-                    plotOptions: {                        
-                        column: {
-                            stacking: 'normal',                           
-                            
-                        },                  
-                    },                  
-                    series: [    
-                    {
-                            name: 'a lanzar',
-                            data: [valorMaximo-23],
-                            stack: 'male', 
-                            color:COLORES.espacio
-                        },                
-                        {
-                            name: 'a lanzar',
-                            data: [1, 0,0,1],
-                            stack: 'male', 
-                            color:COLORES.azul
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [3, 0,0, 3],
-                            stack: 'male', 
-                            color:COLORES.espacio
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [2, 0,0, 2],
-                            stack: 'male', 
-                            color:COLORES.azul
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [2, 0,0, 1],
-                            stack: 'male', 
-                            color:COLORES.espacio
-                        }               
-                    ]
-                });
+        //     ]
+        // });
 
-        Highcharts.chart('container2',{                                        
-                    chart: {
-                        type: 'column',
-                        //renderTo: 'container-' + i,
-                        //renderTo: $('#'),
-                        width: 153,
-                        // height: 180,
-                        // margin: [0, 0, 0, 0]                   
-                    },
-                    credits: {
-                        enabled: true
-                    },                   
-                    title: {
-                        text: ''
-                    },
-                    legend:{
-                        enabled: false
-                    }, 
-                    xAxis: {
-                        // lineWidth: 0,
-                        categories: ['LAC','','','DEC'],
-                        // minorTickLength: 0,
-                        // tickLength: 0,
-                        // gridLineWidth: 1,
-                    },
-                    yAxis: {
-                        title: {
-                            text: ''
-                        },
-                        // lineWidth: 1,
-                        // gridLineWidth: 1,
-                        // minorTickLength: 1,
-                        // tickLength: 1,
-                        min: 1,
-                         max: valorMaximo
-                      //  min: 1, max: valorMaximo, tickInterval:1, title: { text: '' }
-                    },
-                    tooltip: {
-                        //headerFormat: '<span style="font-size:10px;display:none;">{point.key}</span><table>',
-                        //pointFormat: '<table class="tooltip-avance"><tr><td style="color:black;padding:0;font-size:9px">{series.name}: </td>' +
-                        //                        '<td style="padding:0;font-size:10px"><b>{point.y:.3f} </b></td></tr>',
-                        //footerFormat: '</table>',                        
-                        //shared: false,
-                        //useHTML: true
-                        enabled: false
-                    },
-                    plotOptions: {                        
-                        series: {
-                            stacking: 'normal',                           
-                            // pointPadding: 0,
-                            // groupPadding: 0,
-                            grouping: false,
-                            borderColor:'none'
-                        },                        
-                    },                  
-                    series: [    
-                     {
-                            name: 'a lanzar',
-                            data: [valorMaximo-23],
-                            stack: 'bar', 
-                            color:COLORES.espacio
-                        },                
-                        {
-                            name: 'a lanzar',
-                            data: [2,0,0,0.5], 
-                            stack: 'bar', 
-                            color:COLORES.azul
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [4,0,0,4], 
-                            stack: 'bar', 
-                            color:COLORES.espacio
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [1,0,0,1],
-                            stack: 'bar', 
-                            color:COLORES.azul
-                        },
-                        {
-                            name: 'a lanzar',
-                            data: [1,0,0,1], 
-                            stack: 'bar', 
-                            color:COLORES.espacio
-                        }                 
-                    ]
-                });
-		
-	</script>
+
+        Highcharts.chart('container2', {
+            chart: {
+                type: 'column',
+                //renderTo: 'container-' + i,
+                //renderTo: $('#'),
+                width: 153,
+                // height: 180,
+                // margin: [0, 0, 0, 0]                   
+            },
+            credits: {
+                enabled: true
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: {
+                // lineWidth: 0,
+                categories: ['LAC', '', '', 'DEC'],
+                // minorTickLength: 0,
+                // tickLength: 0,
+                // gridLineWidth: 1,
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                // lineWidth: 1,
+                // gridLineWidth: 1,
+                // minorTickLength: 1,
+                // tickLength: 1,
+                min: 1,
+                max: valorMaximo
+                    //  min: 1, max: valorMaximo, tickInterval:1, title: { text: '' }
+            },
+            tooltip: {
+                //headerFormat: '<span style="font-size:10px;display:none;">{point.key}</span><table>',
+                //pointFormat: '<table class="tooltip-avance"><tr><td style="color:black;padding:0;font-size:9px">{series.name}: </td>' +
+                //                        '<td style="padding:0;font-size:10px"><b>{point.y:.3f} </b></td></tr>',
+                //footerFormat: '</table>',                        
+                //shared: false,
+                //useHTML: true
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal',
+                    // pointPadding: 0,
+                    // groupPadding: 0,
+                    grouping: false,
+                    borderColor: 'none'
+                },
+            },
+            series: [{
+                name: 'a lanzar',
+                data: [valorMaximo - 23],
+                stack: 'bar',
+                color: COLORES.espacio
+            }, {
+                name: 'a lanzar',
+                data: [2, 0, 0, 0.5],
+                stack: 'bar',
+                color: COLORES.azul
+            }, {
+                name: 'a lanzar',
+                data: [4, 0, 0, 4],
+                stack: 'bar',
+                color: COLORES.espacio
+            }, {
+                name: 'a lanzar',
+                data: [1, 0, 0, 1],
+                stack: 'bar',
+                color: COLORES.azul
+            }, {
+                name: 'a lanzar',
+                data: [1, 0, 0, 1],
+                stack: 'bar',
+                color: COLORES.espacio
+            }]
+        });
+    </script>
 </body>
+
 </html>
