@@ -7,20 +7,36 @@ var data = [
     { linea: 'DECO', minEntrada: 2, maxEntrada: 5, minSalida: 7, maxSalida: 9 },
     // { linea: 'DECO', minEntrada: 2, maxEntrada: 5, minSalida: 7, maxSalida: 9 },
 ];
+var lineas = [{ linea: "CGL_PSQ", minEntrada: 15, maxEntrada: 30 },
+    { linea: "CGL_PSQ", minEntrada: 25, maxEntrada: 30 },
+    { linea: "CGL_PSQ", minEntrada: 10, maxEntrada: 24 },
+    { linea: "CGL_PSQ", minEntrada: 20, maxEntrada: 30 },
+    { linea: "CGL_PSQ", minEntrada: 10, maxEntrada: 12 },
+    { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "EMB1_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "EMB1_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "EMB1_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "EMB1_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "EMB1_PSQ", minEntrada: 5, maxEntrada: 12 },
+    { linea: "PT", minEntrada: 5, maxEntrada: 12 }
+]
 
-var ps = [{ lin: 'DES', entrada: 2, maxEntrada: 4 }]
-ps = ps.map(function(item) {
-    return { linea: item.lin, minEntrada: item.entrada, maxEntrada: item.maxEntrada }
-})
+
+
 
 var Grafico = Grafico || {
     matriz: [],
     idxMatriz: 0,
     COLORES: {
         espacio: "rgba(0,0,0,0)", //#
-        azul: "blue"
+        azul: "#252850"
     },
     idGrafica: '',
+    width: 0,
 
     init: function(data, idGrafica) {
         var self = this;
@@ -33,6 +49,7 @@ var Grafico = Grafico || {
         var self = this;
         var categorias = [];
 
+        self.width = 0;
         self.matriz = eval(self.obtenerMatriz(dLineas));
 
         // recorrer lineas
@@ -42,6 +59,7 @@ var Grafico = Grafico || {
 
             categorias.push(key);
             this.recorrerLineas(dLineas[key], cont);
+            self.width += 100;
             cont++;
         }
         var series = self.crearSeriesEntrada(self.matriz);
@@ -50,12 +68,15 @@ var Grafico = Grafico || {
     },
     renderizarGrafica: function(dataSeries, dataCategorias) {
         var self = this;
+        console.log(dataSeries);
+
         Highcharts.chart(self.idGrafica, {
             chart: {
                 type: 'column',
+                width: self.width
             },
             credits: {
-                enabled: true
+                enabled: false
             },
             title: {
                 text: ''
@@ -81,8 +102,14 @@ var Grafico = Grafico || {
                 column: {
                     stacking: 'normal',
                 },
+                series: {
+                    pointWidth: 15, // Grosor de barras
+                }
             },
-            series: dataSeries
+            series: dataSeries,
+            exporting: {
+                showTable: true
+            }
         });
 
 
@@ -202,4 +229,4 @@ var Grafico = Grafico || {
     }
 }
 
-Grafico.init(data, 'container');
+Grafico.init(lineas, 'container');
