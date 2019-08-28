@@ -9,7 +9,7 @@ var data = [
 ];
 var lineas = [{ linea: "CGL_PSQ", minEntrada: 15, maxEntrada: 30 },
     { linea: "CGL_PSQ", minEntrada: 25, maxEntrada: 30 },
-    { linea: "CGL_PSQ", minEntrada: 10, maxEntrada: 24 },
+    { linea: "CGL_PSQ", minEntrada: 13, maxEntrada: 24 },
     { linea: "CGL_PSQ", minEntrada: 20, maxEntrada: 30 },
     { linea: "CGL_PSQ", minEntrada: 10, maxEntrada: 12 },
     { linea: "LAB_PSQ", minEntrada: 5, maxEntrada: 12 },
@@ -30,6 +30,8 @@ var lineas = [{ linea: "CGL_PSQ", minEntrada: 15, maxEntrada: 30 },
 
 var Grafico = Grafico || {
     matriz: [],
+    mTooltip: [],
+    mCategorias: [],
     idxMatriz: 0,
     COLORES: {
         espacio: "rgba(0,0,0,0)", //#
@@ -50,7 +52,15 @@ var Grafico = Grafico || {
         var categorias = [];
 
         self.width = 0;
-        self.matriz = eval(self.obtenerMatriz(dLineas));
+        // crear variables matrix y matrixToltip
+        eval(self.obtenerMatriz(dLineas));
+
+        self.matriz = _matriz;
+        self.mTooltip = _mTooltip;
+
+        console.log('Matriz', self.matriz);
+        console.log('Matriz Tooltip', self.matrizDataTooltip);
+
 
         // recorrer lineas
         var cont = 0;
@@ -63,12 +73,13 @@ var Grafico = Grafico || {
             cont++;
         }
         var series = self.crearSeriesEntrada(self.matriz);
+        console.log(categorias);
+        self.mCategorias = categorias;
         self.renderizarGrafica(series, categorias);
 
     },
     renderizarGrafica: function(dataSeries, dataCategorias) {
         var self = this;
-        console.log(dataSeries);
 
         Highcharts.chart(self.idGrafica, {
             chart: {
@@ -96,20 +107,26 @@ var Grafico = Grafico || {
                 //max: valorMaximo
             },
             tooltip: {
-                enabled: false
+                enabled: true,
+                formatter: function(tooltip) {
+                    var i = this.series.index;
+                    var j = self.mCategorias.indexOf(this.key);
+                    console.log(i, j);
+
+                    console.log(self.mTooltip[i][j]);
+                }
             },
             plotOptions: {
                 column: {
                     stacking: 'normal',
+                    borderWidth: 1
                 },
                 series: {
-                    pointWidth: 15, // Grosor de barras
+                    pointWidth: 15, // Grosor de barras                    
                 }
             },
             series: dataSeries,
-            exporting: {
-                showTable: true
-            }
+
         });
 
 
@@ -129,14 +146,25 @@ var Grafico = Grafico || {
                 barra = item.maxEntrada - item.minEntrada;
                 maxAnterior = item.maxEntrada;
             } else {
-                espacio = item.minEntrada - maxAnterior;
-                barra = item.maxEntrada - item.minEntrada;
+                if (maxAnterior >= item.maxEntrada) {
+                    espacio = 0;
+                    barra = 0;
+                } else {
+                    espacio = item.minEntrada - maxAnterior;
+                    barra = item.maxEntrada - item.minEntrada;
+                    barra = (barra + maxAnterior) >= item.maxEntrada ? (item.maxEntrada - maxAnterior) : barra;
+                }
                 maxAnterior = item.maxEntrada;
             }
 
             self.matriz[contAux][matrizIndex] = espacio;
+            self.mTooltip[contAux][matrizIndex] = item;
+
             contAux++;
+
             self.matriz[contAux][matrizIndex] = barra;
+            self.mTooltip[contAux][matrizIndex] = item;
+
             contAux++;
         });
     },
@@ -144,27 +172,35 @@ var Grafico = Grafico || {
     crearSeriesEntrada: function(matriz) {
         var self = this;
         var series = [];
+        console.log(matriz);
 
         matriz.forEach(function(item, id) {
             var color = '';
+            var enableMouseTracking = false;
             if (id == 0) {
                 color = self.COLORES.espacio;
             } else if (id % 2 == 1) {
                 // Si es impar barra
                 color = self.COLORES.azul;
+                enableMouseTracking = true;
             } else {
                 // Si es par espacio
-                color = self.COLORES.espacio
+                color = self.COLORES.espacio;
+                enableMouseTracking = false;
             }
 
             series.unshift({
                 name: '',
-                data: item,
-                stack: 'male',
-                color: color
+                data: item, // [1,2,3]
+                stack: '1',
+                color: color,
+                enableMouseTracking: enableMouseTracking
             });
 
         });
+        self.mTooltip.reverse();
+        console.log(series);
+
         return series;
     },
     /**
@@ -190,8 +226,9 @@ var Grafico = Grafico || {
         });
 
         for (var key in json) {
+            // Ordenar de menor a mayor
             json[key] = json[key].sort(function(a, b) {
-                return a.maxEntrada - b.maxEntrada;
+                return a.minEntrada - b.minEntrada;
             })
         }
         return json;
@@ -212,20 +249,26 @@ var Grafico = Grafico || {
         }
 
         // Crear matriz de arreglo vacio
-        var codigo = "[";
+        var _matriz = "var _matriz = [";
+        var _mTooltip = "var _mTooltip = ["
         for (var i = 0; i < totalRenglones * 2; i++) {
-            codigo += '[';
+            _matriz += '[';
+            _mTooltip += '[';
             for (var j = 0; j < totalLineas; j++) {
-                codigo += '0';
+                _matriz += '0';
+                _mTooltip += 'null';
                 if (j < totalLineas - 1) {
-                    codigo += ',';
+                    _matriz += ',';
+                    _mTooltip += ','
                 }
             }
-            codigo += '],';
+            _matriz += '],';
+            _mTooltip += '],';
         }
-        codigo += ']';
+        _matriz += '];';
+        _mTooltip += '];';
 
-        return codigo;
+        return _matriz + ' ' + _mTooltip;
     }
 }
 
