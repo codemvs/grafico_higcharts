@@ -25,13 +25,20 @@ var lineas = [{ linea: "CGL_PSQ", minEntrada: 15, maxEntrada: 30 },
     { linea: "PT", minEntrada: 5, maxEntrada: 12 }
 ]
 
-
-
+var lin = '[{"linea":"PT","secuencia":"","grupo":"","relacion":"","pesoIntEntradaDesde":"10","pesoIntEntradaHasta":"17","PesoIntSalidaDesde":"10","pesoIntSalidaHasta":"17"}]'
+var dataPesoEntrada = JSON.parse(lin).map(function(item) {
+    return {
+        linea: item.linea,
+        minEntrada: parseFloat(item.pesoIntEntradaDesde),
+        maxEntrada: parseFloat(item.pesoIntEntradaHasta),
+        grupo: item.grupo,
+        relacion: item.relacion
+    };
+});
 
 var Grafico = Grafico || {
     matriz: [],
     mTooltip: [],
-    mCategorias: [],
     idxMatriz: 0,
     COLORES: {
         espacio: "rgba(0,0,0,0)", //#
@@ -58,9 +65,6 @@ var Grafico = Grafico || {
         self.matriz = _matriz;
         self.mTooltip = _mTooltip;
 
-        console.log('Matriz', self.matriz);
-        console.log('Matriz Tooltip', self.matrizDataTooltip);
-
 
         // recorrer lineas
         var cont = 0;
@@ -73,8 +77,7 @@ var Grafico = Grafico || {
             cont++;
         }
         var series = self.crearSeriesEntrada(self.matriz);
-        console.log(categorias);
-        self.mCategorias = categorias;
+
         self.renderizarGrafica(series, categorias);
 
     },
@@ -84,7 +87,7 @@ var Grafico = Grafico || {
         Highcharts.chart(self.idGrafica, {
             chart: {
                 type: 'column',
-                width: self.width
+                width: 200
             },
             credits: {
                 enabled: false
@@ -97,23 +100,39 @@ var Grafico = Grafico || {
             },
             xAxis: {
                 categories: dataCategorias,
+                labels: {
+                    formatter: function() {
+
+                        return '<i class="fa fa-plus"></i>' + this.value;
+                    },
+                    useHTML: true,
+                    align: 'center'
+                }
             },
             yAxis: {
                 title: {
                     text: ''
                 },
                 tickInterval: 1,
-                min: 1,
-                //max: valorMaximo
+                min: 1
             },
             tooltip: {
                 enabled: true,
                 formatter: function(tooltip) {
-                    var i = this.series.index;
-                    var j = self.mCategorias.indexOf(this.key);
-                    console.log(i, j);
+                    var categorias = this.series.xAxis.categories;
 
-                    console.log(self.mTooltip[i][j]);
+                    var i = this.series.index;
+                    var j = categorias.indexOf(this.key);
+
+                    var linea = self.mTooltip[i][j];
+
+                    var html = '<p><span style="font-size:11px;">LÍNEA: <b>' + linea.linea + '<b></span><br/>' +
+                        '<span style="font-size:11px;">PESOS ENTRADA DESDE: <b>' + linea.minEntrada + '</b></span><br/>' +
+                        '<span style="font-size:11px;">PESOS ENTRADA HASTA: <b>' + linea.maxEntrada + '</b></span><br/>' +
+                        '<span style="font-size:11px;">RELACIÓN: <b>1:3</b></span><br/>' +
+                        '</p>';
+                    return html;
+
                 }
             },
             plotOptions: {
@@ -138,6 +157,7 @@ var Grafico = Grafico || {
         var espacio = 0; // Barra espacios
         var barra = 0; // Barra Valor visible
         var maxAnterior = 0;
+        var sumatoriaBarra = 0;
 
         var contAux = 0;
         arrLinea.forEach(function(item, i) {
@@ -150,21 +170,25 @@ var Grafico = Grafico || {
                     espacio = 0;
                     barra = 0;
                 } else {
-                    espacio = item.minEntrada - maxAnterior;
+                    espacio = (sumatoriaBarra >= item.minEntrada) ? 0 : item.minEntrada - maxAnterior;
                     barra = item.maxEntrada - item.minEntrada;
-                    barra = (barra + maxAnterior) >= item.maxEntrada ? (item.maxEntrada - maxAnterior) : barra;
+                    console.log("PSs", sumatoriaBarra);
+
+                    barra = ((barra + sumatoriaBarra) >= item.maxEntrada) ? (item.maxEntrada - sumatoriaBarra) : barra;
                 }
                 maxAnterior = item.maxEntrada;
             }
 
             self.matriz[contAux][matrizIndex] = espacio;
             self.mTooltip[contAux][matrizIndex] = item;
+            sumatoriaBarra += espacio;
+            console.log(espacio, item, maxAnterior);
 
             contAux++;
 
             self.matriz[contAux][matrizIndex] = barra;
             self.mTooltip[contAux][matrizIndex] = item;
-
+            sumatoriaBarra += barra;
             contAux++;
         });
     },
@@ -272,4 +296,4 @@ var Grafico = Grafico || {
     }
 }
 
-Grafico.init(lineas, 'container');
+Grafico.init(dataPesoEntrada, 'container');

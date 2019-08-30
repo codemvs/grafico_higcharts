@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <div style="padding-top: 20px;">
-
+        <h1 class="">Hola</h1>
+        <i class="fa fa-plus"></i>
         <div id="container" style="width:auto; display: inline; float: left;"></div>
         <div id="container2" style="width:auto; display: inline; float: left;"></div>
 
@@ -16,6 +19,7 @@
 
     <script src="highcharts.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
     <script src="app.js"></script>
     <script>
         var COLORES = {
@@ -86,34 +90,45 @@
             },
             plotOptions: {
                 series: {
-                    // stacking: 'normal',
+                    stacking: 'normal',
                     // pointPadding: 0,
                     // groupPadding: 0,
 
-                    borderColor: 'none',
-                    enableMouseTracking: true
+                    // borderColor: 'none',
+                    // enableMouseTracking: true
 
                 },
             },
+
             series: [{
                 name: 'a lanzar',
-                data: [0],
-                stack: 'bar',
+                data: [6],
+                stack: 'male',
                 color: COLORES.azul
             }, {
                 name: 'a lanzar',
                 data: [0],
-                stack: 'bar',
+                stack: 'male',
+                color: COLORES.espacio
+            }, {
+                name: 'a lanzar',
+                data: [0],
+                stack: 'male',
+                color: COLORES.azul
+            }, {
+                name: 'a lanzar',
+                data: [0],
+                stack: 'male',
                 color: COLORES.espacio
             }, {
                 name: 'a lanzar',
                 data: [1],
-                stack: 'bar',
+                stack: 'male',
                 color: COLORES.azul
             }, {
                 name: 'a lanzar',
                 data: [0],
-                stack: 'bar',
+                stack: 'male',
                 color: COLORES.espacio
             }],
             exporting: {
