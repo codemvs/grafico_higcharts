@@ -296,4 +296,4 @@ var Grafico = Grafico || {
     }
 }
 
-Grafico.init(dataPesoEntrada, 'container');
+Grafico.init(lineas, 'container');
